@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Classic Snake game — keyboard and touch controls" />
+  <title>Snake</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="layout">
+
+    <!-- Score HUD -->
+    <header class="hud" role="region" aria-label="Game scores">
+      <div class="hud__stat">
+        <span class="hud__label">Score</span>
+        <span class="hud__value" id="score-value" aria-live="polite" aria-label="Score: 0">0</span>
+      </div>
+      <h1 class="hud__title">Snake</h1>
+      <div class="hud__stat">
+        <span class="hud__label">Best</span>
+        <span class="hud__value" id="high-score-value">0</span>
+      </div>
+    </header>
+
+    <!-- Game canvas -->
+    <main class="canvas-wrapper" role="main">
+      <canvas
+        id="game-canvas"
+        aria-label="Snake game board"
+        role="img"
+      ></canvas>
+
+      <!-- Overlay: idle / paused / game-over -->
+      <div
+        id="overlay"
+        class="overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="overlay-title"
+        aria-describedby="overlay-body"
+      >
+        <h2 id="overlay-title" class="overlay__title">Snake</h2>
+        <p  id="overlay-body"  class="overlay__body">
+          Press <kbd>Enter</kbd> or tap <strong>Start</strong> to play
+        </p>
+        <button id="overlay-btn" class="btn btn--primary" aria-label="Start game">
+          Start Game
+        </button>
+      </div>
+    </main>
+
+    <!-- D-pad: mobile controls -->
+    <nav id="dpad" class="dpad" aria-label="Game direction controls">
+      <button class="dpad__btn dpad__btn--up"    data-dir="UP"    aria-label="Move up">▲</button>
+      <div class="dpad__row">
+        <button class="dpad__btn dpad__btn--left"  data-dir="LEFT"  aria-label="Move left">◀</button>
+        <button class="dpad__btn dpad__btn--down"  data-dir="DOWN"  aria-label="Move down">▼</button>
+        <button class="dpad__btn dpad__btn--right" data-dir="RIGHT" aria-label="Move right">▶</button>
+      </div>
+    </nav>
+
+    <footer class="footer">
+      <p>Arrow keys / WASD · <kbd>Enter</kbd> to pause · <kbd>Esc</kbd> to pause</p>
+    </footer>
+
+  </div>
+
+  <script type="module" src="src/game.js"></script>
+</body>
+</html>

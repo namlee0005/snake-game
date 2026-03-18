@@ -1,0 +1,247 @@
+/* ─── Design tokens ──────────────────────────────────────────────────────────── */
+:root {
+  --color-bg:          #0f0f1a;
+  --color-board-bg:    #1a1a2e;
+  --color-grid:        #16213e;
+  --color-snake-head:  #4ecca3;
+  --color-snake-body:  #2ea882;
+  --color-food:        #e94560;
+  --color-text:        #e0e0e0;
+  --color-text-muted:  #888;
+  --color-overlay-bg:  rgba(15, 15, 26, 0.92);
+  --color-btn:         #4ecca3;
+  --color-btn-text:    #0f0f1a;
+
+  --radius:    8px;
+  --canvas-sz: min(400px, 92vw);
+  --transition: 200ms ease;
+}
+
+/* ─── Reset & base ────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* ─── Layout ──────────────────────────────────────────────────────────────────── */
+.layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 440px;
+}
+
+/* ─── HUD ─────────────────────────────────────────────────────────────────────── */
+.hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: var(--canvas-sz);
+}
+
+.hud__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-snake-head);
+  text-transform: uppercase;
+}
+
+.hud__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 4rem;
+}
+
+.hud__label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+}
+
+.hud__value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+}
+
+/* ─── Canvas wrapper + overlay ───────────────────────────────────────────────── */
+.canvas-wrapper {
+  position: relative;
+  width: var(--canvas-sz);
+  height: var(--canvas-sz);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(78, 204, 163, 0.15);
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated; /* keeps grid crisp when CSS-scaled */
+}
+
+/* Overlay */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  background: var(--color-overlay-bg);
+  backdrop-filter: blur(4px);
+  border-radius: var(--radius);
+  padding: 2rem;
+  opacity: 1;
+  transition: opacity var(--transition);
+}
+
+.overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.overlay__title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: var(--color-snake-head);
+  text-transform: uppercase;
+}
+
+.overlay__body {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.overlay__body kbd {
+  display: inline-block;
+  padding: 0.1em 0.4em;
+  border: 1px solid #444;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.85em;
+  background: #222;
+  color: var(--color-text);
+}
+
+/* ─── Button ──────────────────────────────────────────────────────────────────── */
+.btn {
+  cursor: pointer;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.65em 2em;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.btn--primary {
+  background: var(--color-btn);
+  color: var(--color-btn-text);
+  box-shadow: 0 0 16px rgba(78, 204, 163, 0.4);
+}
+
+.btn--primary:hover,
+.btn--primary:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 0 24px rgba(78, 204, 163, 0.6);
+}
+
+.btn--primary:active {
+  transform: translateY(0);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-snake-head);
+  outline-offset: 3px;
+}
+
+/* ─── D-pad ───────────────────────────────────────────────────────────────────── */
+.dpad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  user-select: none;
+}
+
+.dpad__row {
+  display: flex;
+  gap: 4px;
+}
+
+.dpad__btn {
+  width: 52px;
+  height: 52px;
+  background: #1e1e32;
+  border: 1px solid #333;
+  border-radius: var(--radius);
+  color: var(--color-text);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background var(--transition), transform 80ms ease;
+  touch-action: manipulation; /* eliminates double-tap zoom delay */
+}
+
+.dpad__btn:hover,
+.dpad__btn:focus-visible {
+  background: #2a2a44;
+}
+
+.dpad__btn:active {
+  background: var(--color-snake-head);
+  color: var(--color-btn-text);
+  transform: scale(0.93);
+}
+
+.dpad__btn:focus-visible {
+  outline: 2px solid var(--color-snake-head);
+  outline-offset: 2px;
+}
+
+/* ─── Footer ──────────────────────────────────────────────────────────────────── */
+.footer {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.footer kbd {
+  display: inline-block;
+  padding: 0.1em 0.35em;
+  border: 1px solid #333;
+  border-radius: 3px;
+  font-size: 0.8em;
+  background: #1a1a2e;
+}
+
+/* ─── Hide D-pad on desktop (hover-capable devices) ─────────────────────────── */
+@media (hover: hover) and (pointer: fine) {
+  .dpad { display: none; }
+  .footer p::after { content: ''; }
+}
+
+/* ─── Reduced motion ──────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0ms !important; }
+}
+</style>
